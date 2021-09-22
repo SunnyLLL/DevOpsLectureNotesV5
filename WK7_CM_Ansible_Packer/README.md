@@ -46,12 +46,18 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 
 ## Task #4: Run hello world to validate the setup of the EC2 instances
 
-TODO: naive group
+Edit `hosts` file to add all host names.
 
 ```
 ssh-add ~/.ssh/your_privatekey
 
 cd ansible-playbooks
+
+ansible all -i hosts -u ubuntu -m ping
+ansible web -i hosts -u ubuntu -m ping
+
+# plugin aws
+
 ansible all -i inventory.aws_ec2.yaml -u ubuntu -m ping
 
 # inspect groups
@@ -60,16 +66,34 @@ ansible all -i inventory.aws_ec2.yaml -u ubuntu  -m debug -a 'var=groups.keys()'
 # ping one group
 ansible tag_web -i inventory.aws_ec2.yaml -u ubuntu  -m ping
 
+ansible tag_web -i inventory.aws_ec2.yaml -u ubuntu  -m command -a "df -h"
+ansible tag_redis -i inventory.aws_ec2.yaml -u ubuntu  -a "df -h" # command is the default module
+
+ansible tag_redis -i inventory.aws_ec2.yaml -u ubuntu -m ansible.builtin.copy -a "src=/etc/hosts dest=/tmp/hosts"
+
+ansible tag_redis -i inventory.aws_ec2.yaml -u ubuntu -a "cat /tmp/hosts"
+
 ```
 
 about inventory: https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
 
 about ping module: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ping_module.html
 
+about ansible plugins: https://docs.ansible.com/ansible/latest/plugins/plugins.html
+
 about aws-ec2 plugin: https://docs.ansible.com/ansible/2.6/plugins/inventory/aws_ec2.html
 
+all modules: https://docs.ansible.com/ansible/latest/collections/index_module.html
 ## Task #5: Install a docker role from galaxy to your local laptop
 ```
+
+# get all facts ansible_distribution_release
+
+ansible tag_redis -i inventory.aws_ec2.yaml -u ubuntu -m ansible.builtin.setup
+
+
+
+
 ansible-galaxy install geerlingguy.docker
 ansible-galaxy install geerlingguy.pip
 ```
