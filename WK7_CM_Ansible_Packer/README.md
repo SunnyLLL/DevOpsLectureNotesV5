@@ -20,8 +20,22 @@ Alternatively, you can follow https://docs.ansible.com/ansible/latest/installati
 ```
 cat ~/.ssh/id_rsa.pub
 ```
-- Use this [cloudformation template](CFN-EC2.yaml) to create three EC2 instances: https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template
 
+You need the key name and VPC id for the next step.
+
+
+Use terraform to create EC2 instances
+```bash
+cd terraform
+terraform init
+terraform validate
+
+# change your key_name and vpc_id variable in main.tf
+terraform apply
+
+```
+
+Check created instances.
 ## Task #3: Create an IAM user and configure three environment variables
 Get the value from your AWS console.
 ```
@@ -31,9 +45,21 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 ```
 
 ## Task #4: Run hello world to validate the setup of the EC2 instances
+
+TODO: naive group
+
 ```
-cd DevOpsLectureNotesV4/WK7_CM_Ansible_Packer/ansible-playbooks
+ssh-add ~/.ssh/your_privatekey
+
+cd ansible-playbooks
 ansible all -i inventory.aws_ec2.yaml -u ubuntu -m ping
+
+# inspect groups
+ansible all -i inventory.aws_ec2.yaml -u ubuntu  -m debug -a 'var=groups.keys()'
+
+# ping one group
+ansible tag_web -i inventory.aws_ec2.yaml -u ubuntu  -m ping
+
 ```
 
 about inventory: https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
