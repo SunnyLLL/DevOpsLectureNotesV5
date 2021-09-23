@@ -15,7 +15,7 @@ You may need to add `export PATH=$HOME/.local/bin:$PATH` to your `~/.bashrc` or 
 
 Alternatively, you can follow https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
 
-## Task #2: Create AWS EC2 instances in us-east-1 region to test
+## Task #2: Create AWS EC2 instances in Sydney (ap-southeast-2) region to test
 - Please create a ssh key in AWS. Suggest to import your ssh public key below directly.
 ```
 cat ~/.ssh/id_rsa.pub
@@ -34,7 +34,7 @@ You need the key name and VPC id for the next step.
 
 Use terraform to create EC2 instances
 ```bash
-cd terraform
+cd ${your_repo_path}/WK7_CM_Ansible_Packer/terraform
 terraform init
 terraform validate
 
@@ -54,34 +54,33 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 
 
 
-## Task #4: Run hello world to validate the setup of the EC2 instances
+## Task #4: Run ad-hoc Ansible commands
 
 Edit `hosts` file to add all host names.
 
 ```
 ssh-add ~/.ssh/your_privatekey
 
-cd ansible-playbooks
-
+cd ${your_repo_path}/WK7_CM_Ansible_Packer/ansible-playbooks/ansible-simple
 ansible all -i hosts -u ubuntu -m ping
 ansible web -i hosts -u ubuntu -m ping
 
 # plugin aws
 
-ansible all -i inventory.aws_ec2.yaml -u ubuntu -m ping
+ansible all -i ../inventory.aws_ec2.yaml -u ubuntu -m ping
 
 # inspect groups
-ansible all -i inventory.aws_ec2.yaml -u ubuntu  -m debug -a 'var=groups.keys()'
+ansible all -i ../inventory.aws_ec2.yaml -u ubuntu  -m debug -a 'var=groups.keys()'
 
 # ping one group
-ansible tag_web -i inventory.aws_ec2.yaml -u ubuntu  -m ping
+ansible tag_web -i ../inventory.aws_ec2.yaml -u ubuntu  -m ping
 
-ansible tag_web -i inventory.aws_ec2.yaml -u ubuntu  -m command -a "df -h"
-ansible tag_redis -i inventory.aws_ec2.yaml -u ubuntu  -a "df -h" # command is the default module
+ansible tag_web -i ../inventory.aws_ec2.yaml -u ubuntu  -m command -a "df -h"
+ansible tag_redis -i ../inventory.aws_ec2.yaml -u ubuntu  -a "df -h" # command is the default module
 
-ansible tag_redis -i inventory.aws_ec2.yaml -u ubuntu -m ansible.builtin.copy -a "src=/etc/hosts dest=/tmp/hosts"
+ansible tag_redis -i ../inventory.aws_ec2.yaml -u ubuntu -m ansible.builtin.copy -a "src=/etc/hosts dest=/tmp/hosts"
 
-ansible tag_redis -i inventory.aws_ec2.yaml -u ubuntu -a "cat /tmp/hosts"
+ansible tag_redis -i ../inventory.aws_ec2.yaml -u ubuntu -a "cat /tmp/hosts"
 
 ```
 
@@ -94,6 +93,17 @@ about ansible plugins: https://docs.ansible.com/ansible/latest/plugins/plugins.h
 about aws-ec2 plugin: https://docs.ansible.com/ansible/2.6/plugins/inventory/aws_ec2.html
 
 all modules: https://docs.ansible.com/ansible/latest/collections/index_module.html
+
+## Task #5: Simple playbook
+
+```bash
+
+ansible-playbook -i ../inventory.aws_ec2.yaml site.yaml
+ansible tag_redis -i ../inventory.aws_ec2.yaml -u ubuntu -a "systemctl status redis"
+
+
+```
+
 ## Task #5: Install a docker role from galaxy to your local laptop
 ```
 
