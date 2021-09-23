@@ -21,6 +21,14 @@ Alternatively, you can follow https://docs.ansible.com/ansible/latest/installati
 cat ~/.ssh/id_rsa.pub
 ```
 
+
+Make sure aws cli is configures
+
+```
+aws configure
+aws sts get-caller-identity
+```
+
 You need the key name and VPC id for the next step.
 
 
@@ -43,6 +51,8 @@ export AWS_ACCESS_KEY=YOUR_AWS_ACCESS_KEY
 export AWS_SECRET_KEY=YOUR_AWS_SECRET_KEY
 export ANSIBLE_HOST_KEY_CHECKING=False
 ```
+
+
 
 ## Task #4: Run hello world to validate the setup of the EC2 instances
 
@@ -102,6 +112,8 @@ More about galaxy: https://docs.ansible.com/ansible/latest/galaxy/user_guide.htm
 Alternatively, you can use `ansible-galaxy install -r requirements.yaml`
 
 ## Task #6: Read playbook under ansible-playbook-plain and execute
+
+# todo: playbook apt-get redis, declarative.
 Read `site.yaml` under `ansible-playbook-plain`.
 ```
 ansible-playbook -i ../inventory.aws_ec2.yaml site.yaml
@@ -131,3 +143,10 @@ Install sth like Jenkins, Kubernetes, wordpress, nginx etc.
 # Homework
 
 Learn packer and run packer examples in the `packer` folder.
+
+
+Don't forget to delete.
+
+```
+terraform apply -destroy
+```
