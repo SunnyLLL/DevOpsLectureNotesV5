@@ -104,8 +104,10 @@ ansible tag_redis -i ../inventory.aws_ec2.yaml -u ubuntu -a "systemctl status re
 
 ```
 
-## Task #5: Install a docker role from galaxy to your local laptop
+## Task #6: Install a docker role from galaxy to your local laptop
 ```
+
+cd ${your_repo_path}/WK7_CM_Ansible_Packer/ansible-playbooks/ansible-playbook-plain
 
 # get all facts ansible_distribution_release
 
@@ -121,9 +123,8 @@ More about galaxy: https://docs.ansible.com/ansible/latest/galaxy/user_guide.htm
 
 Alternatively, you can use `ansible-galaxy install -r requirements.yaml`
 
-## Task #6: Read playbook under ansible-playbook-plain and execute
+## Task #7: Read playbook under ansible-playbook-plain and execute
 
-# todo: playbook apt-get redis, declarative.
 Read `site.yaml` under `ansible-playbook-plain`.
 ```
 ansible-playbook -i ../inventory.aws_ec2.yaml site.yaml
@@ -139,7 +140,7 @@ variables: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variable
 special variables: https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html
 
 
-## Task #7: Read playbook under ansible-playbook-roles and execute
+## Task #8: Read playbook under ansible-playbook-roles and execute
 Read `site.yaml` under `ansible-playbook-roles`.
 ```
 ansible-playbook -i ../inventory.aws_ec2.yaml site.yaml
@@ -147,7 +148,7 @@ ansible-playbook -i ../inventory.aws_ec2.yaml site.yaml
 
 roles: https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html
 
-## Task #8: Install more software via Ansible and play around
+## Task #9: Install more software via Ansible and play around
 Install sth like Jenkins, Kubernetes, wordpress, nginx etc.
 
 # Homework
